@@ -7,7 +7,7 @@ use bevy::window::PrimaryWindow;
 
 use crate::general::{detect_collision, get_boundaries, get_bounded_translation};
 use crate::star::{Star, STAR_SIZE};
-use crate::ui::Score;
+use crate::score::Score;
 
 pub const PLAYER_SIZE: f32 = 64.0;
 pub const PLAYER_SPEED: f32 = 500.0;
@@ -94,7 +94,6 @@ pub fn player_hit_star(
     if let Ok(player_transform) = player_query.get_single_mut() {
         for (star_entity, star_transform) in star_query.iter() {
             if detect_collision(player_transform, PLAYER_SIZE, star_transform, STAR_SIZE) {
-                println!("Player collected star!");
                 score.value += 1;
                 commands.spawn(AudioBundle {
                     source: asset_server.load("audio/laserLarge_000.ogg"),

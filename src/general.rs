@@ -1,5 +1,5 @@
 use bevy::math::Vec3;
-use bevy::prelude::{Transform, Window};
+use bevy::prelude::{Transform, Vec2, Window};
 use rand::prelude::*;
 
 pub fn get_boundaries(window: &Window, object_size: f32) -> (f32, f32, f32, f32) {
@@ -43,8 +43,8 @@ pub fn get_bounded_position(window: &Window, object_size: f32, x: f32, y: f32) -
 }
 
 pub fn get_bounded_translation(translation: Vec3,
-                           x_min: f32, x_max: f32,
-                           y_min: f32, y_max: f32) -> Vec3 {
+                               x_min: f32, x_max: f32,
+                               y_min: f32, y_max: f32) -> Vec3 {
     let mut translation = translation;
 
     if translation.x < x_min {
@@ -69,3 +69,8 @@ pub fn detect_collision(t1: &Transform, size1: f32, t2: &Transform, size2: f32) 
 
     distance < radius1 + radius2
 }
+
+pub fn get_random_direction() -> Vec2 {
+    Vec2::new(random::<f32>(), random::<f32>()).normalize()
+}
+

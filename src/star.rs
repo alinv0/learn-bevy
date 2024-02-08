@@ -1,5 +1,5 @@
 use bevy::asset::AssetServer;
-use bevy::prelude::{Commands, Component, default, Query, Res, ResMut, Resource, SpriteBundle, Timer, TimerMode, Transform, Window, With};
+use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
 use crate::general::get_random_bounded_coordinates;
@@ -72,6 +72,6 @@ pub fn spawn_stars_over_time(
 
 pub fn tick_star_spawn_timer(
     mut star_spawn_timer: ResMut<StarSpawnTimer>,
-    time: Res<bevy::prelude::Time>) {
+    time: Res<Time>) {
     star_spawn_timer.timer.tick(time.delta());
 }
