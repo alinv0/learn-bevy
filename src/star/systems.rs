@@ -1,28 +1,12 @@
 use bevy::asset::AssetServer;
-use bevy::prelude::*;
+use bevy::prelude::{Commands, default, Query, Res, ResMut, SpriteBundle, Time, Transform, Window, With};
 use bevy::window::PrimaryWindow;
 
-use crate::general::get_random_bounded_coordinates;
+use crate::star::{NUMBER_OF_STARS, STAR_SIZE};
+use crate::util::calculations::get_random_bounded_coordinates;
 
-pub const NUMBER_OF_STARS: usize = 10;
-pub const STAR_SIZE: f32 = 30.0;
-pub const START_SPAWN_INTERVAL: f32 = 1.0;
-
-#[derive(Component)]
-pub struct Star {}
-
-#[derive(Resource)]
-pub struct StarSpawnTimer {
-    pub timer: Timer,
-}
-
-impl Default for StarSpawnTimer {
-    fn default() -> Self {
-        Self {
-            timer: Timer::from_seconds(START_SPAWN_INTERVAL, TimerMode::Repeating)
-        }
-    }
-}
+use super::components::Star;
+use super::resources::StarSpawnTimer;
 
 pub fn spawn_stars(
     mut commands: Commands,

@@ -1,37 +1,20 @@
 use bevy::asset::AssetServer;
 use bevy::audio::{AudioBundle, PlaybackSettings};
-use bevy::math::{Vec2, Vec3};
+use bevy::math::Vec3;
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 use rand::prelude::*;
-use crate::gameover::GameOver;
 
-use crate::general::{detect_collision, get_boundaries, get_bounded_translation, get_random_bounded_coordinates, get_random_direction};
-use crate::player::{Player, PLAYER_SIZE};
-use crate::score::Score;
+use crate::gameover::events::GameOver;
+use crate::player::components::Player;
+use crate::player::PLAYER_SIZE;
+use crate::score::components::Score;
+use crate::util::audio::play_sound;
+use crate::util::calculations::{detect_collision, get_boundaries, get_bounded_translation, get_random_bounded_coordinates, get_random_direction};
 
-pub const NUMBER_OF_ENEMIES: usize = 4;
-pub const ENEMY_SIZE: f32 = 64.0;
-pub const ENEMY_SPEED: f32 = 200.0;
-pub const ENEMY_SPAWN_INTERVAL: f32 = 10.0;
-
-#[derive(Component)]
-pub struct Enemy {
-    pub direction: Vec2,
-}
-
-#[derive(Resource)]
-pub struct EnemySpawnTimer {
-    pub timer: Timer,
-}
-
-impl Default for EnemySpawnTimer {
-    fn default() -> Self {
-        Self {
-            timer: Timer::from_seconds(ENEMY_SPAWN_INTERVAL, TimerMode::Repeating)
-        }
-    }
-}
+use super::{ENEMY_SIZE, ENEMY_SPEED, NUMBER_OF_ENEMIES};
+use super::components::Enemy;
+use super::resources::EnemySpawnTimer;
 
 pub fn spawn_enemies(
     mut commands: Commands,
@@ -83,9 +66,6 @@ pub fn update_enemy_direction(
 
     let (x_min, x_max, y_min, y_max) = get_boundaries(window, ENEMY_SIZE);
 
-    let sound1 = asset_server.load("audio/pluck_001.ogg");
-    let sound2 = asset_server.load("audio/pluck_002.ogg");
-
     for (transform, mut enemy) in enemy_query.iter_mut() {
         let mut direction_changed = false;
 
@@ -100,16 +80,11 @@ pub fn update_enemy_direction(
         }
 
         if direction_changed {
-            let sound = if random::<f32>() > 0.5 {
-                sound1.clone()
+            if random::<f32>() > 0.5 {
+                play_sound(&mut commands, &asset_server, "audio/pluck_001.ogg".to_string());
             } else {
-                sound2.clone()
-            };
-            commands.spawn(AudioBundle {
-                source: sound,
-                settings: PlaybackSettings::ONCE,
-                ..default()
-            });
+                play_sound(&mut commands, &asset_server, "audio/pluck_002.ogg".to_string());
+            }
         }
     }
 }
@@ -188,4 +163,3 @@ pub fn tick_enemy_spawn_timer(
     time: Res<Time>) {
     enemy_spawn_timer.timer.tick(time.delta());
 }
-

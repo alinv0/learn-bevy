@@ -1,33 +1,10 @@
-use bevy::prelude::{DetectChanges, EventReader, Res, ResMut, Resource};
-use crate::gameover::GameOver;
-
-#[derive(Resource)]
-pub struct Score {
-    pub value: u32,
-}
-
-impl Default for Score {
-    fn default() -> Self {
-        Self { value: 0 }
-    }
-}
+use bevy::prelude::{DetectChanges, EventReader, Res, ResMut};
+use super::components::{HighScores, Score};
+use crate::gameover::events::GameOver;
 
 pub fn update_score(score: Res<Score>) {
     if score.is_changed() {
         println!("Score: {}", score.value.to_string());
-    }
-}
-
-#[derive(Resource, Debug)]
-pub struct HighScores {
-    pub scores: Vec<(String, u32)>,
-}
-
-impl Default for HighScores {
-    fn default() -> Self {
-        Self {
-            scores: Vec::new()
-        }
     }
 }
 

@@ -1,19 +1,17 @@
 use bevy::asset::AssetServer;
-use bevy::audio::{AudioBundle, PlaybackSettings};
 use bevy::input::Input;
 use bevy::math::Vec3;
-use bevy::prelude::{Commands, Component, default, Entity, KeyCode, Query, Res, ResMut, SpriteBundle, Time, Transform, Window, With};
+use bevy::prelude::{Commands, default, Entity, KeyCode, Query, Res, ResMut, SpriteBundle, Time, Transform, Window, With};
 use bevy::window::PrimaryWindow;
 
-use crate::general::{detect_collision, get_boundaries, get_bounded_translation};
-use crate::star::{Star, STAR_SIZE};
-use crate::score::Score;
+use super::{PLAYER_SIZE, PLAYER_SPEED};
+use crate::score::components::Score;
+use crate::star::components::Star;
+use crate::star::STAR_SIZE;
+use crate::util::audio::play_sound;
+use crate::util::calculations::{detect_collision, get_boundaries, get_bounded_translation};
 
-pub const PLAYER_SIZE: f32 = 64.0;
-pub const PLAYER_SPEED: f32 = 500.0;
-
-#[derive(Component)]
-pub struct Player {}
+use super::components::*;
 
 pub fn spawn_player(
     mut commands: Commands,
@@ -95,11 +93,10 @@ pub fn player_hit_star(
         for (star_entity, star_transform) in star_query.iter() {
             if detect_collision(player_transform, PLAYER_SIZE, star_transform, STAR_SIZE) {
                 score.value += 1;
-                commands.spawn(AudioBundle {
-                    source: asset_server.load("audio/laserLarge_000.ogg"),
-                    settings: PlaybackSettings::ONCE,
-                    ..default()
-                });
+                play_sound(&mut commands,
+                           &asset_server,
+                           "audio/laserLarge_000.ogg".to_string(),
+                );
                 commands.entity(star_entity).despawn();
             }
         }

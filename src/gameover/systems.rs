@@ -1,11 +1,7 @@
 use bevy::app::AppExit;
 use bevy::input::Input;
-use bevy::prelude::{Event, EventReader, EventWriter, KeyCode, Res};
-
-#[derive(Event)]
-pub struct GameOver {
-    pub score: u32,
-}
+use bevy::prelude::{EventReader, EventWriter, KeyCode, Res};
+use super::events::GameOver;
 
 pub fn exit_game(
     keyboard_input: Res<Input<KeyCode>>,
