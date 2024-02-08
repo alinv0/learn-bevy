@@ -1,4 +1,4 @@
-use bevy::prelude::{Resource, Timer, TimerMode};
+use bevy::prelude::*;
 
 use super::START_SPAWN_INTERVAL;
 

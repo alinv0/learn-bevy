@@ -1,4 +1,4 @@
-use bevy::prelude::{Camera2dBundle, Commands, default, Query, Transform, Window, With};
+use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
 pub fn spawn_camera(

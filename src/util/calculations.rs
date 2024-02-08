@@ -1,5 +1,5 @@
 use bevy::math::Vec3;
-use bevy::prelude::{Transform, Vec2, Window};
+use bevy::prelude::*;
 use rand::prelude::*;
 
 pub fn get_boundaries(window: &Window, object_size: f32) -> (f32, f32, f32, f32) {

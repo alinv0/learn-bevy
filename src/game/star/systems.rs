@@ -1,12 +1,12 @@
 use bevy::asset::AssetServer;
-use bevy::prelude::{Commands, default, Query, Res, ResMut, SpriteBundle, Time, Transform, Window, With};
+use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
-use crate::star::{NUMBER_OF_STARS, STAR_SIZE};
 use crate::util::calculations::get_random_bounded_coordinates;
 
 use super::components::Star;
 use super::resources::StarSpawnTimer;
+use super::super::star::{NUMBER_OF_STARS, STAR_SIZE};
 
 pub fn spawn_stars(
     mut commands: Commands,
@@ -28,6 +28,15 @@ pub fn spawn_stars(
                 Star {},
             )
         );
+    }
+}
+
+pub fn despawn_stars(
+    mut commands: Commands,
+    star_query: Query<Entity, With<Star>>,
+) {
+    for entity in star_query.iter() {
+        commands.entity(entity).despawn();
     }
 }
 

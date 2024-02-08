@@ -1,6 +1,6 @@
 use bevy::asset::AssetServer;
 use bevy::audio::{AudioBundle, PlaybackSettings};
-use bevy::prelude::{Commands, default, Res};
+use bevy::prelude::*;
 
 pub fn play_sound(
     commands: &mut Commands,

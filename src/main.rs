@@ -1,30 +1,28 @@
 use bevy::prelude::*;
+use crate::game::GamePlugin;
+use crate::main_menu::MainMenuPlugin;
 
-use crate::camera::CameraPlugin;
-use crate::enemy::EnemyPlugin;
-use crate::gameover::GameOverPlugin;
-use crate::player::PlayerPlugin;
-use crate::score::ScorePlugin;
-use crate::star::StarPlugin;
 
-mod star;
-mod score;
-mod gameover;
 mod util;
 mod camera;
-mod enemy;
-mod player;
+mod game;
+mod main_menu;
 
 
 fn main() {
     App::new()
+        .add_state::<AppState>()
         .add_plugins((
             DefaultPlugins,
-            CameraPlugin,
-            GameOverPlugin,
-            PlayerPlugin,
-            EnemyPlugin,
-            ScorePlugin,
-            StarPlugin))
+            GamePlugin,
+            MainMenuPlugin,))
         .run();
+}
+
+#[derive(States, Debug, Clone, Copy, Eq, PartialEq, Hash, Default)]
+pub enum AppState {
+    #[default]
+    MainMenu,
+    Game,
+    GameOver,
 }

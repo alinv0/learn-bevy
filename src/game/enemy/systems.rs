@@ -5,10 +5,10 @@ use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 use rand::prelude::*;
 
-use crate::gameover::events::GameOver;
-use crate::player::components::Player;
-use crate::player::PLAYER_SIZE;
-use crate::score::components::Score;
+use super::super::gameover::events::GameOver;
+use super::super::player::components::Player;
+use super::super::player::PLAYER_SIZE;
+use super::super::score::components::Score;
 use crate::util::audio::play_sound;
 use crate::util::calculations::{detect_collision, get_boundaries, get_bounded_translation, get_random_bounded_coordinates, get_random_direction};
 
@@ -26,6 +26,15 @@ pub fn spawn_enemies(
     for _ in 0..NUMBER_OF_ENEMIES {
         let s = asset_server.clone();
         random_spawn(&mut commands, s, window);
+    }
+}
+
+pub fn despawn_enemies(
+    mut commands: Commands,
+    enemy_query: Query<Entity, With<Enemy>>,
+) {
+    for entity in enemy_query.iter() {
+        commands.entity(entity).despawn();
     }
 }
 

@@ -1,13 +1,13 @@
 use bevy::asset::AssetServer;
 use bevy::input::Input;
 use bevy::math::Vec3;
-use bevy::prelude::{Commands, default, Entity, KeyCode, Query, Res, ResMut, SpriteBundle, Time, Transform, Window, With};
+use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
 use super::{PLAYER_SIZE, PLAYER_SPEED};
-use crate::score::components::Score;
-use crate::star::components::Star;
-use crate::star::STAR_SIZE;
+use super::super::score::components::Score;
+use super::super::star::components::Star;
+use super::super::star::STAR_SIZE;
 use crate::util::audio::play_sound;
 use crate::util::calculations::{detect_collision, get_boundaries, get_bounded_translation};
 
@@ -33,6 +33,15 @@ pub fn spawn_player(
             Player {}
         )
     );
+}
+
+pub fn despawn_player(
+    mut commands: Commands,
+    player_query: Query<Entity, With<Player>>,
+) {
+    if let Ok(player_entity) = player_query.get_single() {
+        commands.entity(player_entity).despawn();
+    }
 }
 
 pub fn player_movement(
