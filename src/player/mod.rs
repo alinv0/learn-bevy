@@ -1,5 +1,5 @@
 use bevy::app::Update;
-use bevy::prelude::{Plugin, Startup};
+use bevy::prelude::*;
 
 use systems::*;
 
@@ -12,13 +12,15 @@ pub const PLAYER_SPEED: f32 = 500.0;
 pub struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
-    fn build(&self, app: &mut bevy::prelude::App) {
+    fn build(&self, app: &mut App) {
         app
             .add_systems(Startup, spawn_player)
             .add_systems(Update,
                          (
-                             player_movement,
-                             confine_player_movement,
+                             (
+                                 player_movement,
+                                 confine_player_movement
+                             ).chain(),
                              player_hit_star, ));
     }
 }
