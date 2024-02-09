@@ -4,18 +4,30 @@ use bevy::prelude::*;
 use crate::AppState;
 use crate::game::SimulationState;
 
+pub fn pause_simulation(
+    mut next_simulation_state: ResMut<NextState<SimulationState>>,
+) {
+    next_simulation_state.set(SimulationState::Paused);
+}
+
+pub fn resume_simulation(
+    mut next_simulation_state: ResMut<NextState<SimulationState>>,
+) {
+    next_simulation_state.set(SimulationState::Running);
+}
+
 pub fn toggle_simulation(
-    mut commands: Commands,
     keyboard_input: Res<Input<KeyCode>>,
     simulation_state: Res<State<SimulationState>>,
+    mut next_simulation_state: ResMut<NextState<SimulationState>>,
 ) {
     if keyboard_input.just_pressed(KeyCode::Space) {
         if **simulation_state == SimulationState::Running {
-            commands.insert_resource(NextState(Some(SimulationState::Paused)));
+            next_simulation_state.set(SimulationState::Paused);
             println!("Paused");
         }
         if **simulation_state == SimulationState::Paused {
-            commands.insert_resource(NextState(Some(SimulationState::Running)));
+            next_simulation_state.set(SimulationState::Running);
             println!("Running");
         }
     }
@@ -31,13 +43,13 @@ pub fn exit_game(
 }
 
 pub fn transition_to_game_state(
-    mut commands: Commands,
     keyboard_input: Res<Input<KeyCode>>,
     app_state: Res<State<AppState>>,
+    mut next_app_state: ResMut<NextState<AppState>>,
 ) {
     if keyboard_input.just_pressed(KeyCode::G) {
         if **app_state != AppState::Game {
-            commands.insert_resource(NextState(Some(AppState::Game)));
+            next_app_state.set(AppState::Game);
             println!("AppState: Game");
         }
     }

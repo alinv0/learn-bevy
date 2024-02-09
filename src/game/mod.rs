@@ -1,13 +1,14 @@
 use bevy::prelude::*;
 
+use systems::*;
+
+use crate::AppState;
 use crate::camera::CameraPlugin;
 use crate::game::enemy::EnemyPlugin;
 use crate::game::gameover::GameOverPlugin;
 use crate::game::player::PlayerPlugin;
 use crate::game::score::ScorePlugin;
 use crate::game::star::StarPlugin;
-use systems::*;
-use crate::AppState;
 
 pub mod enemy;
 pub mod player;
@@ -28,6 +29,8 @@ impl Plugin for GamePlugin {
                 EnemyPlugin,
                 ScorePlugin,
                 StarPlugin))
+            .add_systems(OnEnter(AppState::Game), pause_simulation)
+            .add_systems(OnExit(AppState::Game), resume_simulation)
             .add_systems(Update, (
                 exit_game,
                 transition_to_game_state,
@@ -37,7 +40,7 @@ impl Plugin for GamePlugin {
 
 #[derive(States, Debug, Clone, Copy, Eq, PartialEq, Hash, Default)]
 pub enum SimulationState {
-    Running,
     #[default]
+    Running,
     Paused,
 }
